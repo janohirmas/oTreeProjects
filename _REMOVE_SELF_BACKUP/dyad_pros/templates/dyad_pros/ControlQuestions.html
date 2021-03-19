@@ -1,0 +1,44 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Control Questions for part 1{% endblock %}
+
+{% block content %}
+    <p>
+        TO BE DONE
+    </p>
+        {% if player.role == 'A' %}
+            Control Questions A
+        {% elif player.role == 'B' %}
+            Control Questions B
+        {% elif player.role == 'C3' %}
+            Control Questions C3
+        {% endif %}
+
+    <div align="right">
+        <p><br/>{% next_button %}</p>
+    </div>
+
+    <div class="card bg-light m-3">
+    <div class="card-body">
+
+    {% if player.role == 'A' %}
+        {% include Constants.instructions_AB %}
+        {% include Constants.instructions_AB_1 %}
+        {% include Constants.instructions_AB_2 %}
+    {% elif player.role == 'B' %}
+        {% include Constants.instructions_AB %}
+        {% include Constants.instructions_AB_1 %}
+        {% include Constants.instructions_AB_2 %}
+    {% elif player.role == 'C3' %}
+        {% include Constants.instructions_C3 %}
+        {% include Constants.instructions_C3_1 %}
+        {% include Constants.instructions_C3_2 %}
+        {% include Constants.instructions_C3_3 %}
+        {% include Constants.instructions_C3_4 %}
+        {% include Constants.instructions_C3_5 %}
+    {% endif %}
+
+    </div>
+    </div>
+{% endblock %}

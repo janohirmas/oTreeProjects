@@ -1,0 +1,39 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Instructions for part 1{% endblock %}
+
+{% block content %}
+    <p>
+        In this part, different participants are engaging in different tasks.
+        Below you see the instructions for the task you are assigned to.
+    </p>
+
+    <div class="card bg-light m-3">
+    <div class="card-body">
+
+        <h3>
+            How to roll the die
+        </h3>
+
+        <p>
+            On your desk you have a cup and a six-sided die.
+        </p>
+
+        <p>
+            To roll the die, pick up the cup, put the die in the cup, shake the cup a few times, and reverse it on your desk such that the bottom on the cup faces up.
+            Then peek through the hole, to see the die roll outcome.
+        </p>
+
+        <p>
+            Try this once or twice now – roll the die and peek through the hole.
+        </p>
+
+
+    </div>
+    </div>
+
+    <div align="right">
+        <p><br/>{% next_button %}</p>
+    </div>
+{% endblock %}

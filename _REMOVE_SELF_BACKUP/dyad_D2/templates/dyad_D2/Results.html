@@ -1,0 +1,33 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Final Payoff
+{% endblock %}
+
+{% block content %}
+    {% if player.role == 'A' %}
+        <p>
+            A - Yor payoff for this period is <strong>{{ participant.payoff }}</strong>
+        </p>
+    {% elif player.role == 'B' %}
+        <p>
+            B - Yor payoff for this period is <strong>{{ participant.payoff }}</strong>
+        </p>
+    {% elif player.role == 'C3' %}
+        <p>
+            C - Yor payoff for this period is <strong>{{ participant.payoff }}</strong>
+        </p>
+    {% elif player.role == 'D2' %}
+        <p>
+            D - Yor payoff for this period is <strong>{{ participant.payoff }}</strong>
+        </p>
+    {% endif %}
+
+    <div align="right">
+        <p><br/>{% next_button %}</p>
+    </div>
+
+{% endblock %}
+
+

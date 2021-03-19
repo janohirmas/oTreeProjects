@@ -1,0 +1,140 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Your task
+{% endblock %}
+
+{% block content %}
+
+    <style>
+    .slidecontainer {
+      width: 100%;
+    }
+
+    .slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 25px;
+      background: #d3d3d3;
+      outline: none;
+      opacity: 0.7;
+      -webkit-transition: .2s;
+      transition: opacity .2s;
+    }
+
+    .slider:hover {
+      opacity: 1;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 25px;
+      height: 25px;
+      background: #4169E1;
+      cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+      width: 25px;
+      height: 25px;
+      background: #4CAF50;
+      cursor: pointer;
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+    tr {
+      border: solid lightgray;
+      border-width: 1px 0;
+    }
+    td, th {
+      vertical-align: center;
+      padding: 5px;
+
+    }
+    </style>
+
+    <p>
+        Your task is to guess how participants in the role of <strong>second movers</strong> behave.
+    </p>
+
+    <p>
+        Please answer the following questions:
+    </p>
+
+    <center>
+        <table style="width:80%">
+          <tr>
+            <th>Question</th>
+            <th>Likelihood</th>
+          </tr>
+          <tr>
+            <td>Suppose that the first mover reported a <strong>1</strong>.<br/>
+                 How likely it is that the second mover will report a <strong>1</strong>?</td>
+            <td>{% formfield group.belief_1_AB label="from 0 to 100%" %}</td>
+            <!--<td>%</td>-->
+
+            <!--  Below commented is the slider solution
+            <td>
+                <div class="input-group">
+
+                    <input type="range" name="belief_1_AB" min="0" max="100" value="0" step="1" class="slider" id="myRange">
+
+                </div>
+            </td>
+            <td style="min-width:50px">
+                &nbsp&nbsp<span id="demo"></span>%
+                <script>
+                    var slider = document.getElementById("myRange");
+                    var output = document.getElementById("demo");
+                    output.innerHTML = slider.value;
+
+                    slider.oninput = function() {
+                        output.innerHTML = this.value;
+                    }
+                </script>
+            </td>
+            -->
+
+          </tr>
+          <tr>
+            <td>Suppose that the first mover reported a <strong>2</strong>.<br/>
+                How likely it is that the second mover will report a <strong>2</strong>?</td>
+            <td>{% formfield group.belief_2_AB label="from 0 to 100%" %}</td>
+            <!--<td>%</td>-->
+          </tr>
+          <tr>
+            <td>Suppose that the first mover reported a <strong>3</strong>.<br/>
+                 How likely it is that the second mover will report a <strong>3</strong>?</td>
+            <td>{% formfield group.belief_3_AB label="from 0 to 100%" %}</td>
+            <!--<td>%</td>-->
+          </tr>
+          <tr>
+            <td>Suppose that the first mover reported a <strong>4</strong>.<br/>
+                 How likely it is that the second mover will report a <strong>4</strong>?</td>
+            <td>{% formfield group.belief_4_AB label="from 0 to 100%" %}</td>
+            <!--<td>%</td>-->
+          </tr>
+          <tr>
+            <td>Suppose that the first mover reported a <strong>5</strong>.<br/>
+                 How likely it is that the second mover will report a <strong>5</strong>?</td>
+            <td>{% formfield group.belief_5_AB label="from 0 to 100%" %}</td>
+            <!--<td>%</td>-->
+          </tr>
+          <tr>
+            <td>Suppose that the first mover reported a <strong>6</strong>.<br/>
+                 How likely it is that the second mover will report a <strong>6</strong>?</td>
+            <td>{% formfield group.belief_6_AB label="from 0 to 100%" %}</td>
+            <!--<td>%</td>-->
+          </tr>
+        </table>
+    </center>
+
+    <div align="right">
+        <p><br/>{% next_button %}</p>
+    </div>
+
+{% endblock %}

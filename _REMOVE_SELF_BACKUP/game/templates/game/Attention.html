@@ -1,0 +1,33 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background-color: black;
+        color: white;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        text-align: center;
+        font-size: calc((1em + 1vw)*.5);
+    }
+
+
+
+</style>
+
+<body>
+    <div>
+        <p>Now we will run the practice trials.</p>
+    </div>
+</body>
+
+{% next_button %}
+
+{% endblock %}

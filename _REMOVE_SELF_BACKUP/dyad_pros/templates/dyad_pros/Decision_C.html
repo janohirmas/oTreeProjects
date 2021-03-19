@@ -1,0 +1,32 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+
+{% block content %}
+
+    <center>
+
+    <hr>
+
+    <p>
+        The number is
+    </p>
+
+    <p>
+        <h1>{{group.report_A}}</h1>
+    </p>
+
+    <hr>
+
+    <p>
+        Please roll the die exactly once and report the die roll outcome:
+    </p>
+
+    {% formfield group.report_C3 label="" %}
+
+    </center>
+    <div align="right">
+        <p><br/>{% next_button %}</p>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% load otree %}
+
+    <h3>
+        Your task (I)
+    </h3>
+
+    <p>
+       In part 1, you are paired with another participant in the room.
+       This is someone you do not know and who will remain anonymous.
+       Throughout part 1 you will keep the same partner.
+    </p>
+
+    <p>
+        One of you will be the “first mover” and the other will be the “second mover”.
+        You will keep your role throughout part 1.
+    </p>
+    {% if player.role == 'A' %}
+        <p>
+            You are randomly assigned to the role of the <strong>first mover</strong>.
+        </p>
+    {% elif player.role == 'B' %}
+        <p>
+            You are randomly assigned to the role of the <strong>second mover</strong>.
+        </p>
+    {% endif %}

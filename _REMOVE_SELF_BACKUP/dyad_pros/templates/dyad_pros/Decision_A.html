@@ -1,0 +1,18 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block content %}
+
+    <center><p>
+    Please roll the die exactly once and report the die roll outcome:
+    </p>
+
+    {% formfield group.report_A label="" %}
+
+    </center>
+
+    <div align="right">
+        <p><br/>{% next_button %}</p>
+    </div>
+
+{% endblock %}

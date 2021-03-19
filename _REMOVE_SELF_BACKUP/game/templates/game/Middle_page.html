@@ -1,0 +1,52 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+<style>
+
+
+/* Need this class to hide the debug info table in the bottom during the demo */
+.hide_debug {
+    width: 100%;
+}
+
+body {
+    background-color: black;
+}
+
+.text {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    text-align: center;
+    font-size: calc((1em + 1vw)*1.5);
+    color: white;
+}
+
+.next_button {
+    visibility: hidden
+}
+</style>
+
+<body>
+    <div class="hide_debug">
+        <p class="text" id="question">You are halfway through the experiment!</p>
+        <p class="text" id="hint" style="top: 60%; font-size: calc((1em + 1vw)">Press any key on your keyboard to continue.</p>
+    </div>
+    <button class="next_button btn btn-primary btn-large" id="Button">Next</button>
+</body>
+
+<script language = "javascript" type = "text/javascript">
+
+document.onkeydown = checkKey;
+function checkKey(e) {
+    e = e || window.event;
+        Button.click()
+    }
+</script>
+{% endblock %}

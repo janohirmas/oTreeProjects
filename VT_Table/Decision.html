@@ -1,0 +1,27 @@
+
+    <link href="{% static 'VT_Table/LineReveal.css' %}" rel="stylesheet">
+    <script src="{% static 'VT_Table/LineReveal.js' %}"></script>
+
+{% block content %}
+
+<div class="game-body">
+
+</div>
+
+
+
+<!-- Just for debugging -->
+
+<ul>
+    <li> {{ Constants.sActivation }}</li>
+    <li> {{ Constants.vTrigger }}</li>
+    <li> {{  Constants.Attr_order }}</li>
+    <li class="tooltip"> Hover over me    
+        <span class="tooltiptext">Tooltip text</span>
+    </li>
+</ul>
+
+
+
+
+{% endblock %}

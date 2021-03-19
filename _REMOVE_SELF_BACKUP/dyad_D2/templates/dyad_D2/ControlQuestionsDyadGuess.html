@@ -1,0 +1,24 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Control Questions{% endblock %}
+
+{% block content %}
+    <p>
+        TO BE DONE
+    </p>
+        Control Questions D2
+    <div align="right">
+        <p><br/>{% next_button %}</p>
+    </div>
+
+    <div class="card bg-light m-3">
+    <div class="card-body">
+
+        {% include Constants.instructions_D2 %}
+        {% include Constants.instructions_D2_1 %}
+        {% include Constants.instructions_D2_2 %}
+
+    </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,268 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* Need this part to hide the debug info table in the bottom during the demo */
+.hide_debug {
+    width: 100%;
+<!--    height: 2000px;-->
+}
+body {
+    background-color: black;
+}
+
+.coin {
+    width:100%
+}
+
+/* Container holding the image and the text */
+
+.left_container {
+    position: relative;
+}
+
+.right_container {
+    position: relative;
+}
+
+.coins_table {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+
+}
+
+.values_left {
+    color: white;
+    font-size: calc((1em + 1vw)*1.5);
+    position: absolute;
+    top: 50%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+}
+
+.values_right {
+    color: white;
+    position: absolute;
+    font-size: calc((1em + 1vw)*1.5);
+    top: 50%;
+    left: 20%;
+    transform: translate(-50%, -50%);
+}
+
+.cross_fix {
+    color: white;
+    font-size: calc((1em + 1vw)*1.5);
+
+}
+
+.next_button {
+    visibility: hidden
+}
+
+</style>
+
+<body>
+    <div class="hide_debug">
+        <table class="coins_table">
+            <tr>
+                <td>
+                    <div class = "left_container" id="left_container">
+                        <img class="coin" src="{% static 'global/experiment_pics/coin_left_new.png' %}">
+                        <p class="values_left"><span id="left_value"></span></p>
+                    </div>
+                </td>
+                <td>
+                    <p class="cross_fix" id="cross_fix">+</p>
+                </td>
+                <td>
+                    <div class = "right_container" id="right_container">
+                        <img class="coin" src="{% static 'global/experiment_pics/coin_right_new.png' %}">
+                        <p class="values_right"><span id="right_value"></span></p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <button class="next_button btn btn-primary btn-large" id="Button">Next</button>
+    <input type="hidden" id="dec" name="dec"/>
+    <input type="hidden" id="RT" name="RT"/>
+    <input type="hidden" id="FN_gains" name="FN_gains"/>
+    <input type="hidden" id="FN_losses" name="FN_losses"/>
+    <input type="hidden" id="left" name="left"/>
+    <input type="hidden" id="first" name="first"/>
+    <input type="hidden" id="last_screen" name="last_screen"/>
+    <input type="hidden" id="last_fix_t" name="last_fix_t"/>
+</body>
+
+<script language = "javascript" type = "text/javascript">
+document.getElementById("left_container").style.visibility = "hidden";
+document.getElementById("right_container").style.visibility = "hidden";
+var first_container_attention_time, second_container_attention_time;
+var startTime, endTime;
+t0 = start();
+var last_fix_duration;
+document.getElementById("RT").value=15;
+var wait_time = (Math.random()*2 + 1)*1000;
+var cross_fix_time = wait_time;
+setTimeout(function()
+{
+    document.getElementById("cross_fix").style.visibility = "hidden";
+}, wait_time);
+
+// define first side to appear (left or right)
+var sides = ["left", "right"];
+var side_first_to_appear = sides[Math.floor(Math.random() * sides.length)];
+if (side_first_to_appear.localeCompare("left") === 0) {
+    var side_second_to_appear = "right";
+} else {
+    var side_second_to_appear = "left";
+}
+var first_container = side_first_to_appear+"_container"
+var second_container = side_second_to_appear+"_container"
+
+// define first value that appears (loss or gain)
+var values = ["gain", "loss"];
+var val_first_to_appear = values[Math.floor(Math.random() * values.length)];
+if (val_first_to_appear.localeCompare("loss") === 0) {
+    var val_second_to_appear = "gain";
+    var first_container_val = 0;
+    var second_container_val = 1;
+    $("#first").val(first_container_val);
+} else {
+    var val_second_to_appear = "loss";
+    var first_container_val = 1;
+    var second_container_val = 0;
+    $("#first").val(first_container_val);
+}
+
+// put first value to appear in a first container
+if (side_first_to_appear.localeCompare("left") === 0  && val_first_to_appear.localeCompare("gain") === 0){
+    document.getElementById("left_value").innerHTML = {{Gain}}
+    document.getElementById("right_value").innerHTML = {{Loss}}
+    $("#left").val(1);
+} else if (side_first_to_appear.localeCompare("left") === 0  && val_first_to_appear.localeCompare("loss") === 0){
+    document.getElementById("left_value").innerHTML = {{Loss}}
+    document.getElementById("right_value").innerHTML = {{Gain}}
+    $("#left").val(0);
+} else if (side_first_to_appear.localeCompare("right") === 0  && val_first_to_appear.localeCompare("gain") === 0){
+    document.getElementById("left_value").innerHTML = {{Loss}}
+    document.getElementById("right_value").innerHTML = {{Gain}}
+    $("#left").val(0);
+} else if (side_first_to_appear.localeCompare("right") === 0  && val_first_to_appear.localeCompare("loss") === 0){
+    document.getElementById("left_value").innerHTML = {{Gain}}
+    document.getElementById("right_value").innerHTML = {{Loss}}
+    $("#left").val(1);
+}
+// define the fixation times per gain and loss
+var time_gain = {{FT_gain}};
+var time_loss = {{FT_loss}};
+// record the number of fixations for losses and gains
+var counter_1 = 0;
+var counter_2 = 0;
+// define the maximum duration of a trial
+var trial_time = 6000;
+document.onkeydown = checkKey;
+var time_fixation_start;
+var x = 0;
+while (trial_time + cross_fix_time > wait_time)  {
+    setTimeout(function(){
+        time_fixation_start = start_fixation();
+        document.getElementById(first_container).style.visibility = "visible";
+        $("#last_screen").val(first_container_val);
+        counter_1++;
+    }, wait_time)
+    if (val_first_to_appear.localeCompare("gain") === 0) {
+        wait_time = wait_time + time_gain;
+    } else {
+        wait_time = wait_time + time_loss;
+    }
+    setTimeout(function(){ document.getElementById(first_container).style.visibility = "hidden";}, wait_time)
+    setTimeout(function(){
+        time_fixation_start = start_fixation();
+        document.getElementById(second_container).style.visibility = "visible";
+        $("#last_screen").val(second_container_val);
+        counter_2++;
+    }, wait_time)
+    if (val_first_to_appear.localeCompare("gain") === 0) {
+        wait_time = wait_time + time_loss;
+    } else {
+        wait_time = wait_time + time_gain;
+    }
+    setTimeout(function(){ document.getElementById(second_container).style.visibility = "hidden";}, wait_time)
+}
+
+
+var Button = document.getElementById("Button");
+// make decision 0 by default (preserve this value if decision has not been made)
+$("#dec").val(0)
+function checkKey(e) {
+    // This function is launched when a key is pressed. It checkes whether the key was the upward or downward arrow.
+    e = e || window.event;
+    // check whether upwards or downwards arrow is pressed AND that a participant started to look at the values
+    if ((e.keyCode === 38 || e.keyCode === 40 ) && counter_1 + counter_2 >= 2){
+        t1 = end();
+        last_fix_duration = end_fixation();
+        $("#last_fix_t").val(last_fix_duration);
+        if (e.keyCode === 38){$("#dec").val(2);}
+        if (e.keyCode === 40){$("#dec").val(1);}
+        // define what counts counter_1 and counter_2
+        if (val_first_to_appear.localeCompare("gain") === 0) {
+            $("#FN_gains").val(counter_1);
+            $("#FN_losses").val(counter_2);
+        } else {
+            $("#FN_gains").val(counter_2);
+            $("#FN_losses").val(counter_1);
+        }
+        $("#RT").val(Math.floor(t1-cross_fix_time));
+        Button.click();
+    }
+}
+
+// Functions
+
+function start() {
+  startTime = new Date();
+};
+
+function end() {
+    endTime = new Date();
+    var timeDiff = endTime - startTime; //in ms
+    return timeDiff;
+};
+
+function start_fixation() {
+  startFixationTime = new Date();
+};
+
+function end_fixation() {
+    endFixationTime = new Date();
+    var timeFixationDiff = endFixationTime - startFixationTime; //in ms
+    return timeFixationDiff;
+};
+
+// stop the trial if participants thinks for 6 seconds
+setTimeout(function(){
+    t1 = end();
+    $("#RT").val(Math.floor(t1-cross_fix_time));
+    if (val_first_to_appear.localeCompare("gain") === 0) {
+    $("#FN_gains").val(counter_1);
+    $("#FN_losses").val(counter_2);
+    } else {
+    $("#FN_gains").val(counter_2);
+    $("#FN_losses").val(counter_1);
+    }
+    Button.click();
+    }, trial_time + cross_fix_time)
+
+
+</script>
+{% endblock %}

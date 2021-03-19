@@ -1,0 +1,179 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+<style>
+/* Need this part to hide the debug info table in the bottom during the demo */
+
+
+body {
+    background-color: black;
+    color: white;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    text-align: center;
+    font-size: calc((1em + 1vw)*.5);
+}
+
+
+.slidecontainer {
+    width: 100%;
+
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 25px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+.sliderticks {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+.sliderticks p {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  width: 1px;
+  background: #D3D3D3;
+  height: 10px;
+  line-height: 40px;
+  margin: 0 0 20px 0;
+}
+
+.sliderticks_2 {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+.sliderticks_2 p {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  width: 1px;
+  height: 50px;
+}
+
+.next_button {
+    visibility: hidden
+}
+
+.hints {
+    margin: 50px 0 0 0;
+}
+h2 {
+    margin: 0 0 100px 0;
+}
+</style>
+
+<body>
+<div class="hide_debug">
+    <div class="slidecontainer">
+        <h2> How confident were you when making your decision?</h2>
+        <div class="sliderticks_2">
+            <p>Not confident</p>
+            <p>Very confident</p>
+        </div>
+        <input type="range" min="1" max="7" value="4" class="slider" id="myRange">
+        <div class="sliderticks">
+            <p>1</p>
+            <p>2</p>
+            <p>3</p>
+            <p>4</p>
+            <p>5</p>
+            <p>6</p>
+            <p>7</p>
+        </div>
+    </div>
+    <div class="hints">
+        <p>Left button = move to left</p>
+        <p>Right button = move to right</p>
+        <p>Enter or A = confirm selection</p>
+    </div>
+    <input type="hidden" id="conf" name="conf"/>
+    <input type="hidden" id="conf_RT" name="conf_RT"/>
+    <button class="next_button btn btn-primary btn-large" id="Button">Next</button>
+</div>
+</body>
+    <script type="text/javascript">
+        // start timer
+        var startTime, endTime;
+        t0 = start();
+        // focus on the slider
+        var el = document.getElementById('myRange')
+        el.focus();
+        el.onblur = function () {
+        setTimeout(function () {
+        el.focus();
+        });
+        };
+        // remember the value
+
+        document.onkeydown = function (e) {
+            $("#conf").val(document.getElementById("myRange").value);
+                e = e || window.event;
+                if (e.keyCode === 65){
+                Button.click()
+            }
+        }
+
+        document.getElementById("conf").onsubmit = function(){
+
+            };
+
+        setInterval(CalculateTime, 1);
+
+    // Functions
+    function start() {
+      startTime = new Date();
+    };
+
+    function end() {
+        endTime = new Date();
+        var timeDiff = endTime - startTime; //in ms
+        return timeDiff;
+    };
+
+    function CalculateTime() {
+        t1 = end();
+        $("#conf_RT").val(t1);
+    };
+    </script>
+
+{% endblock %}

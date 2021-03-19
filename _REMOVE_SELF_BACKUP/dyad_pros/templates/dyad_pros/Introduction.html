@@ -1,0 +1,28 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Welcome and thank you for participating in this experiment.{% endblock %}
+
+{% block content %}
+
+<p>General rules:</p>
+
+<ul>
+  <li>Please remain quiet and switch off your mobile phone.</li>
+  <li>Please read the following instructions carefully.</li>
+  <li>Do not speak to the other participants during the experiment.</li>
+  <li>Whenever you have a question, please raise your hand and an experimenter will come to your
+cubicle.</li>
+  <li>For participation, you will earn a show-up fee of 9 euros.</li>
+  <li>The experiment consist of 2 parts. In each part, you can earn additional payment.</li>
+  <li>The instructions for each part will be explained after the previous part is finished.</li>
+  <li>At the end of the experiment you will be paid the sum of your earnings in part 1, part 2, and the
+show-up fee.</li>
+  <li>Each part is independent. That is, the decisions you make part 1 do not influence the second
+part in any way.</li>
+</ul>
+
+   <div align="right">
+        <p><br/>{% next_button %}</p>
+   </div>
+{% endblock %}

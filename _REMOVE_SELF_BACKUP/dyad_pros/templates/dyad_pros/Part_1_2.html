@@ -1,0 +1,29 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Instructions for part 1{% endblock %}
+
+{% block content %}
+    <p>
+        In this part, different participants are engaging in different tasks.
+        Below you see the instructions for the task you are assigned to.
+    </p>
+
+    <div class="card bg-light m-3">
+    <div class="card-body">
+
+        {% if player.role == 'A' %}
+            {% include Constants.instructions_AB_2 %}
+        {% elif player.role == 'B' %}
+            {% include Constants.instructions_AB_2 %}
+        {% elif player.role == 'C3' %}
+            {% include Constants.instructions_C3_2 %}
+        {% endif %}
+
+    </div>
+    </div>
+
+    <div align="right">
+        <p><br/>{% next_button %}</p>
+    </div>
+{% endblock %}

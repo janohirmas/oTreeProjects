@@ -1,0 +1,86 @@
+{% load otree %}
+<head>
+<style>
+#payoff {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 75%;
+}
+
+#payoff td, #payoff th {
+  border: 1px solid #ddd;
+  padding: 8px;  text-align: center;
+}
+
+#payoff tr:nth-child(even){background-color: #f2f2f2;}
+
+#payoff tr:hover {background-color: #ddd;}
+
+#payoff th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background-color: #4169E1;
+  color: white;
+}
+</style>
+</head>
+
+    <h3>
+        Payoff of the participants
+    </h3>
+
+    <p>
+        If the number that appears on the screen and the number that the participant reports are the same number (“a double”),
+        the participant is paid according to the following table:
+    </p>
+
+    <center>
+        <table id="payoff">
+          <tr>
+            <th>Number on the screen</th>
+            <th>Participant's report</th>
+            <th>Participant's payoff</th>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>1 Euro</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>2</td>
+            <td>2 Euro</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>3</td>
+            <td>3 Euro</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>4</td>
+            <td>4 Euro</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>5</td>
+            <td>5 Euro</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>6</td>
+            <td>6 Euro</td>
+          </tr>
+        </table>
+    </center>
+
+    <br> </br>
+    <p>
+        If the number that appears on the screen and the number that the participant reports are two different numbers (“no double”), the participant earns 0 euros.
+    </p>
+
+    <p>
+        The task has multiple rounds. At the end of the experiment, one round is randomly selected to be paid out.
+        The participant’s payoff in the task is determined by the number that appeared on the screen and his/her report in that round.
+    </p>
+
