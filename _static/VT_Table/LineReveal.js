@@ -1,4 +1,5 @@
     // Create relevant variables and Inputs
+    var GameBody        = document.getElementsByClassName("game-body")[0];
     let sPreviousPress  = 'Start';
     let dPreviousTime   = new Date().getTime();
     let sActivation     = js_vars.sActivation;
@@ -7,11 +8,14 @@
     let vOutcomes       = js_vars.vOutcomes.split(',');
     let vColNames       = js_vars.vColnames;
     let vRowNames       = js_vars.vRownames;
-    let TablePaddingV   = js_vars.TablePaddingV;
-    let TablePaddingH   = js_vars.TablePaddingH;
+    const TablePaddingV = js_vars.TablePaddingV;
+    const TablePaddingH = js_vars.TablePaddingH;
     console.log(vOutcomes);
     console.log(vColNames);
     console.log(vRowNames);
+    // record time of pressing
+    var now   = new Date().getTime();
+    var diff  = 0;
 
     // Create hidden input (Decision)
     let iDec        = document.createElement("input");
@@ -19,6 +23,7 @@
     iDec.name       = 'iDec';
     iDec.id         = 'iDec';
     iDec.value      = '';
+
     
     // Create hidden input (Pressed Buttons)
     let sButtonClick        = document.createElement("input");
@@ -34,6 +39,7 @@
     sTimeClick.id    = 'sTimeClick';
     sTimeClick.value = '';
     
+
     // Create Table during Page loading
     document.addEventListener("DOMContentLoaded", function(debug=true) {
       
@@ -43,7 +49,9 @@
       for (let j=0; j<x.length; j++) {
         x[j].style.cursor = 'default'; 
       }
-
+      // Include inputs
+      GameBody.appendChild(sButtonClick);
+      GameBody.appendChild(sTimeClick);
     });
     
     
@@ -80,9 +88,9 @@
         if (vTriggerLabels.includes(btn.id)) {
           btn.addEventListener(sActivation, function() {
             // Check that new element is pressed
-            
             if (btn.id != sPreviousPress) {
-              
+              // Restart Initial Time
+              now   = new Date().getTime();
               // display specific content
               HideEverything();
               DisplayContent(DisplayClass,ButtonValue);
@@ -93,23 +101,33 @@
               } else {
                 sButtonClick.value = ButtonID;
               };
-              // console.log(sButtonClick);
-  
-              // record time of pressing
-              let now = new Date().getTime();
-              let diff = (now-dPreviousTime);
-              if (sTimeClick.value) {
-                sTimeClick.value = sTimeClick.value+','+ diff;
-              } else {
-                sTimeClick.value = diff;
-              };
-              // console.log(sTimeClick);
               // change previous to new
               sPreviousPress = btn.id;
               dPreviousTime = now;
-              console.log(sTimeClick.value);
               console.log(sButtonClick.value);
+              
             }
+          });
+          btn.addEventListener('mouseout', function() {
+            // Hide the content & Reset previous item
+            sPreviousPress = ' ';
+            HideEverything();
+            // Check if there is focus checks
+            if (typeof bCheckFocus !== 'undefined' && bCheckFocus==true && TBlur>=dPreviousTime) {
+              // substract the blurred time
+              diff = (now-dPreviousTime)-(TFocus-TBlur);
+            } else {
+              diff = (now-dPreviousTime);
+            }
+            // Add Time
+            if (sTimeClick.value) {
+              sTimeClick.value = sTimeClick.value+','+ diff;
+            } else {
+              sTimeClick.value = diff;
+            };
+              
+            console.log(sTimeClick.value);
+
           });
         };
         
@@ -182,7 +200,7 @@
         row = table.insertRow(i+1);
         cell = row.insertCell(0);
         outcomes = vValues.slice(iCol*i,iCol*(i+1));
-        console.log(vValues + ' - ' + outcomes);
+        // console.log(vValues + ' - ' + outcomes);
         // Add Row Name
         CellButton(cell,vTriggerLabels,'button-game button-action',TableId+'R'+i.toString(),vRowNames[i],'Grow-'+i+' tab-'+TableId,sActivation)
     
@@ -201,14 +219,12 @@
       row.style.textAlign = 'center';
       cell = row.insertCell(0);
       for (j=0; j<iCol; j++) {
-        console.log(row.cells);
         cell = row.insertCell(j+1);
         CellDecisionButton(cell,ButtonClass='btn btn-primary btn-large',DecID=DecID,ButtonValue=j,ButtonName=vColNames[j])
       }
 
       // Append Table to document
-      let body = document.getElementsByClassName("game-body")[0];
-      body.appendChild(table);
+      GameBody.appendChild(table);
     }
 
         // ----------------------------------------------------- //

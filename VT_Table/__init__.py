@@ -11,16 +11,36 @@ Creates Table with Visual Tracing
 class Constants(BaseConstants):
     name_in_url         = 'VT_Table'
     players_per_group   = None
-    num_rounds          = 10                                      # Number of rounds
-    num_prounds         = 3                                       # Number of Practice Rounds
-    sActivation         = 'mouseover'                             # mouseover or click 
-    vTrigger            = "row"                               # List that can include val,col,row
-    Attr_order          = "random"                                # random or constant
-    TablePaddingV        = "5vh"                                  # set up padding between rows (top and bottom)
-    TablePaddingH        = "5vh"                                  # set up padding between columns (left and right)
-    vColnames           = ["Product A", "Product B"]              # Column Names
-    vRownames           = ["Price","Quality","Sustainability"]  # Row Names
-    iTreatment          = 1                                       # 1 Info,Info 2 Info,Uninfo 3 Uninfo,Info 4 Uninfo,Uninfo
+    # Number of rounds
+    num_rounds          = 10  
+    # Number of Practice Rounds                                    
+    num_prounds         = 3
+    # Require FullScreen (Deploys popup when not) True/False
+    sRequireFS          = True                             
+    # mouseover or click 
+    sActivation         = 'click'                             
+    # List that can include val,col,row
+    vTrigger            = "val"                                   
+    # random or constant
+    Attr_order          = "random"  
+    # Checks if you require FullScreen
+    ## if you want to record number of FS changes add integer form iFullscreenChange
+    bRequireFS          = True                                   
+    # Checks if focus changes to other pages
+    ## if you want to record the number of times that focus is lost, add integer form iFocusLost
+    ## if you want to record the total time that focus is lost, add float form dFocusLostT
+    bCheckFocus         = True                               
+    # set up padding between rows (top and bottom)
+    TablePaddingV       = "5vh"                                   
+    # set up padding between columns (left and right)
+    TablePaddingH       = "5vh"                                   
+    # Column Names
+    vColnames           = ["Product A", "Product B"]              
+    # Row Names
+    vRownames           = ["Price","Quality","Sustainability"]    
+    # 1 Info,Info 2 Info,Uninfo 3 Uninfo,Info 4 Uninfo,Uninfo
+    iTreatment          = 1                                       
+    
 
 
 class Subsession(BaseSubsession):
@@ -34,12 +54,15 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    iDec            = models.IntegerField(blank=True)
-    sButtonClick    = models.StringField(blank=True)
-    sTimeClick      = models.StringField(blank=True)
-    sTableVals      = models.StringField(blank=True)
-    iTreatment      = models.IntegerField(blank=True)
-    sAttrOrder      = models.StringField(blank=True)
+    iDec                = models.IntegerField(blank=True)
+    sButtonClick        = models.StringField(blank=True)
+    sTimeClick          = models.StringField(blank=True)
+    sTableVals          = models.StringField(blank=True)
+    iTreatment          = models.IntegerField(blank=True)
+    sAttrOrder          = models.StringField(blank=True)
+    iFocusLost          = models.IntegerField(blank=True)
+    dFocusLostT         = models.FloatField(blank=True)
+    iFullscreenChange   = models.IntegerField(blank=True)
 
 # FUNCTIONS
 
@@ -92,10 +115,10 @@ class Decision(Page):
         'sButtonClick', 
         'sTimeClick',
         'sAttrOrder',
+        'iFocusLost',
+        'dFocusLostT',
+        'iFullscreenChange',
     ]
-
-    
-    
 
     @staticmethod
     def js_vars(player: Player):
@@ -124,12 +147,16 @@ class Decision(Page):
         return {
             'vOutcomes'         : vOutcomes,
             'sActivation'       : Constants.sActivation,
+            'sRequireFS'        : Constants.sRequireFS,
             'vTrigger'          : Constants.vTrigger,
             'Attr_order'        : Constants.Attr_order,
             'TablePaddingV'     : Constants.TablePaddingV,
             'TablePaddingH'     : Constants.TablePaddingH,
             'vColnames'         : Constants.vColnames,
             'vRownames'         : vRowNames,
+            'bRequireFS'        : Constants.bRequireFS,
+            'bCheckFocus'       : Constants.bCheckFocus,
+
         }
         
 

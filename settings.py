@@ -19,12 +19,6 @@ SESSION_CONFIGS = [
         iTreatment = 0,
     ),
     dict(
-        name='instructions',
-        display_name="Instruction Slideshow",
-        num_demo_participants=1,
-        app_sequence=['Instructions'],
-    ),
-    dict(
         name='vttable',
         display_name="Visual-Tracing Table",
         num_demo_participants=1,
