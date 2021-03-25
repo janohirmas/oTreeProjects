@@ -1,21 +1,24 @@
-    // Create relevant variables and Inputs
-    var GameBody        = document.getElementsByClassName("game-body")[0];
-    let sPreviousPress  = 'Start';
-    let dPreviousTime   = new Date().getTime();
+    // Constants
+    const GameBody        = document.getElementsByClassName("game-body")[0];
+    const TablePaddingV = js_vars.TablePaddingV;
+    const TablePaddingH = js_vars.TablePaddingH;
+    // O-tree variables
     let sActivation     = js_vars.sActivation;
     let vTrigger        = js_vars.vTrigger.split(',');
     let Attr_order      = js_vars.Attr_order;
     let vOutcomes       = js_vars.vOutcomes.split(',');
     let vColNames       = js_vars.vColnames;
     let vRowNames       = js_vars.vRownames;
-    const TablePaddingV = js_vars.TablePaddingV;
-    const TablePaddingH = js_vars.TablePaddingH;
+
+    // Time and Click variables
+    let sPreviousPress  = 'Start';
+    let dPreviousTime   = new Date().getTime();
+    let now             = new Date().getTime();
+    let diff            = 0;
     console.log(vOutcomes);
     console.log(vColNames);
     console.log(vRowNames);
     // record time of pressing
-    var now   = new Date().getTime();
-    var diff  = 0;
 
     // Create hidden input (Decision)
     let iDec        = document.createElement("input");
@@ -54,7 +57,16 @@
       GameBody.appendChild(sTimeClick);
     });
     
-    
+    // ----------------------------------------------------- //
+    //  Function:   Set up Table initial dimensions
+    // ----------------------------------------------------- //
+    function InitialDimensions(vColNames,vRowNames) {
+      // Number of columns and rows for the table
+      iRow  = vRowNames.length +2; // + header and choice buttons
+      iCol  = vColNames.length +1; // + rowName column
+      // Get Screen Dimensions
+      
+    }
 
     // ----------------------------------------------------- //
     //  Function:   Create Decision button
@@ -89,8 +101,6 @@
           btn.addEventListener(sActivation, function() {
             // Check that new element is pressed
             if (btn.id != sPreviousPress) {
-              // Restart Initial Time
-              now   = new Date().getTime();
               // display specific content
               HideEverything();
               DisplayContent(DisplayClass,ButtonValue);
@@ -111,6 +121,8 @@
           btn.addEventListener('mouseout', function() {
             // Hide the content & Reset previous item
             sPreviousPress = ' ';
+            // Restart Initial Time
+            now   = new Date().getTime();
             HideEverything();
             // Check if there is focus checks
             if (typeof bCheckFocus !== 'undefined' && bCheckFocus==true && TBlur>=dPreviousTime) {

@@ -25,7 +25,7 @@ class Constants(BaseConstants):
     Attr_order          = "random"  
     # Checks if you require FullScreen
     ## if you want to record number of FS changes add integer form iFullscreenChange
-    bRequireFS          = True                                   
+    bRequireFS          = False                                   
     # Checks if focus changes to other pages
     ## if you want to record the number of times that focus is lost, add integer form iFocusLost
     ## if you want to record the total time that focus is lost, add float form dFocusLostT

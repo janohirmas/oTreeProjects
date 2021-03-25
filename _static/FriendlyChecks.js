@@ -70,8 +70,8 @@ function pause() {
 //                  2. 
 // ----------------------------------------------------- //
 function play() {
-  console.log('Focus back');
   TFocus            = new Date().getTime();
+  console.log('Focus back');
   let dt            = TFocus-TBlur;
   dFocusLostT.value = +dFocusLostT.value+dt;
 }
