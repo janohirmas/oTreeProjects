@@ -23,6 +23,10 @@ class Constants(BaseConstants):
     vTrigger            = "val"                                   
     # random or constant
     Attr_order          = "random"  
+
+    # Timeout time (in seconds)
+    ## if no time-out required, leave as 0
+    iTimeOut            = 0
     # Checks if you require FullScreen
     ## if you want to record number of FS changes add integer form iFullscreenChange
     bRequireFS          = False                                   
@@ -55,6 +59,7 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
     iDec                = models.IntegerField(blank=True)
+    dRT                 = models.FloatField(blank=True)
     sButtonClick        = models.StringField(blank=True)
     sTimeClick          = models.StringField(blank=True)
     sTableVals          = models.StringField(blank=True)
@@ -114,6 +119,7 @@ class Decision(Page):
         'iDec', 
         'sButtonClick', 
         'sTimeClick',
+        'dRT',
         'sAttrOrder',
         'iFocusLost',
         'dFocusLostT',
@@ -156,7 +162,7 @@ class Decision(Page):
             'vRownames'         : vRowNames,
             'bRequireFS'        : Constants.bRequireFS,
             'bCheckFocus'       : Constants.bCheckFocus,
-
+            'iTimeOut'          : Constants.iTimeOut,
         }
         
 

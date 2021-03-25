@@ -2,6 +2,7 @@
     const GameBody        = document.getElementsByClassName("game-body")[0];
     const TablePaddingV = js_vars.TablePaddingV;
     const TablePaddingH = js_vars.TablePaddingH;
+    const iTimeOut      = js_vars.iTimeOut;
     // O-tree variables
     let sActivation     = js_vars.sActivation;
     let vTrigger        = js_vars.vTrigger.split(',');
@@ -14,6 +15,7 @@
     let sPreviousPress  = 'Start';
     let dPreviousTime   = new Date().getTime();
     let now             = new Date().getTime();
+    let StartTime       = new Date().getTime();
     let diff            = 0;
     console.log(vOutcomes);
     console.log(vColNames);
@@ -42,10 +44,20 @@
     sTimeClick.id    = 'sTimeClick';
     sTimeClick.value = '';
     
+    // Hidden Next Button
+    let EndButton               = document.createElement('button');
+    EndButton.style.visibility  = 'hidden';
+    EndButton.className         = 'next_button btn btn-primary btn-large';
+
+    // Create hidden input (Decision)
+    let dRT         = document.createElement("input");
+    dRT.type       = 'hidden';
+    dRT.name       = 'dRT';
+    dRT.id         = 'dRT';
+    dRT.value      = '';
 
     // Create Table during Page loading
     document.addEventListener("DOMContentLoaded", function(debug=true) {
-      
       // Include Table
       CreateTable(vOutcomes,TableId='T',TableClass='gametable',sActivation,vTrigger,vRowNames,vColNames,DecID = 'iDec');
       let x = document.getElementById('T').getElementsByTagName('button');
@@ -55,10 +67,45 @@
       // Include inputs
       GameBody.appendChild(sButtonClick);
       GameBody.appendChild(sTimeClick);
+      GameBody.appendChild(dRT);
+      GameBody.append(EndButton);
+      // Start Timer
+      if (iTimeOut>0) {
+        console.log('Time-out limit set to: '+iTimeOut);
+        setTimeout(OutOfTime, iTimeOut*1000);
+      } else if (iTimeOut==0) {
+        // Do Nothing
+        console.log('No Time-out limit');
+      } else {
+        console.log(iTimeOut+' is not correctly defined');
+      }
+      
     });
-    
+
     // ----------------------------------------------------- //
-    //  Function:   Set up Table initial dimensions
+    // Function:          Set up Table initial dimensions
+    // ----------------------------------------------------- //
+
+    function OutOfTime() {
+      iDec.value      = '99';
+      dRT.value       = +iTimeOut*1000;
+      EndButton.click();
+    }
+
+    // ----------------------------------------------------- //
+    // Function:          Save Final Variables when submitting
+    // ----------------------------------------------------- //
+
+    function FinalizeTrial() {
+      let FinalTime       = new Date().getTime();
+      dRT.value           = FinalTime - StartTime;
+    }
+
+    // ----------------------------------------------------- //
+    // Function:          Set up Table initial dimensions
+    // Inputs:
+    //   - vColNames :    array of strings with Column ColNames
+    //   - vRowNames :    array of strings with Row Names
     // ----------------------------------------------------- //
     function InitialDimensions(vColNames,vRowNames) {
       // Number of columns and rows for the table
@@ -70,6 +117,12 @@
 
     // ----------------------------------------------------- //
     //  Function:   Create Decision button
+    //  Inputs:
+    //    - Cell        : Target cell, where button is going to be Added 
+    //    - ButtonClass : String, list of classes for button
+    //    - DecID       : String 
+    //    - ButtonValue : String
+    //    - ButtonName  : String
     // ----------------------------------------------------- //
     function CellDecisionButton(Cell,ButtonClass='',DecID='',ButtonValue='',ButtonName='') {
       let btn       = document.createElement('button');
@@ -78,6 +131,7 @@
       btn.value     = ButtonValue;
       btn.innerHTML = ButtonName;
       btn.name      = DecID;
+      btn.addEventListener('click', FinalizeTrial);
       Cell.appendChild(btn);
     }
     // ----------------------------------------------------- //
@@ -85,6 +139,14 @@
     //                  properties.
     //              2.  Include Visual Tracing function depending 
     //                  on activation method  
+    //  Inputs:
+    //    - Cell            : Target cell, where button is going to be Added 
+    //    - vTriggerLabels  : array of strings, contains the IDs of buttons that can be activated
+    //    - ButtonClass     : String, list of classes for button
+    //    - DecID           : String 
+    //    - ButtonValue     : String
+    //    - DisplayClass    : String, class combination that will be activated
+    //    - sActivation     : String, activation method for button
     // ----------------------------------------------------- //
     function CellButton(Cell, vTriggerLabels, ButtonClass='',ButtonID='',ButtonValue='',DisplayClass='',sActivation='click') {
         // Create Button and apply characteristics
@@ -95,36 +157,43 @@
         btn.value = ButtonValue;
         btn.innerHTML = ButtonValue;
         
-        // EventListener functions
-        
         if (vTriggerLabels.includes(btn.id)) {
-          btn.addEventListener(sActivation, function() {
-            // Check that new element is pressed
-            if (btn.id != sPreviousPress) {
-              // display specific content
+          AddVisualTracer(btn,sActivation,DisplayClass);
+        };
+        Cell.appendChild(btn);
+    };
+
+    // ----------------------------------------------------- //
+    //  Function:       1. Adds OnClick or Mouseover/Mouseout  
+    //                  2. Records Times and Clicks Accordingly
+    //  Inputs:
+    //    - btn             : Target button, where evenlistener will be added 
+    //    - sActivation     : String, activation method for button
+    //    - DisplayClass    : String, class combination that will be activated
+    // ----------------------------------------------------- //
+
+    function AddVisualTracer(btn,sActivation,DisplayClass) {      
+      if (sActivation=='click') {
+        // If click
+        btn.addEventListener('click', function() {
+          // Check it's not double click
+          if (btn.id != sPreviousPress) {
+              // Record new time
+              now = new Date().getTime();
+              // display specific content and hide rest
               HideEverything();
-              DisplayContent(DisplayClass,ButtonValue);
-        
+              DisplayContent(DisplayClass);
               // record button pressed  
               if (sButtonClick.value) {
-                sButtonClick.value = sButtonClick.value+','+ButtonID;
+                sButtonClick.value = sButtonClick.value+';'+btn.id;
               } else {
-                sButtonClick.value = ButtonID;
+                sButtonClick.value = btn.id;
               };
               // change previous to new
               sPreviousPress = btn.id;
-              dPreviousTime = now;
               console.log(sButtonClick.value);
-              
-            }
-          });
-          btn.addEventListener('mouseout', function() {
-            // Hide the content & Reset previous item
-            sPreviousPress = ' ';
-            // Restart Initial Time
-            now   = new Date().getTime();
-            HideEverything();
-            // Check if there is focus checks
+            
+            // Check if there was lost of focus
             if (typeof bCheckFocus !== 'undefined' && bCheckFocus==true && TBlur>=dPreviousTime) {
               // substract the blurred time
               diff = (now-dPreviousTime)-(TFocus-TBlur);
@@ -133,30 +202,78 @@
             }
             // Add Time
             if (sTimeClick.value) {
-              sTimeClick.value = sTimeClick.value+','+ diff;
+              sTimeClick.value = sTimeClick.value+';'+ diff;
             } else {
               sTimeClick.value = diff;
             };
-              
-            console.log(sTimeClick.value);
+            // Replace previous time
+            dPreviousTime = now;
+          }
+          console.log(sTimeClick.value);  
+        });
 
-          });
-        };
-        
-        Cell.appendChild(btn);
+      } else if (sActivation=='mouseover') {
+        // mouseover
+        btn.addEventListener('mouseover', function() {
+          // Check that new element is pressed
+          if (btn.id != sPreviousPress) {
+            // Record new time
+            dPreviousTime = new Date().getTime();
+            // display specific content and hide rest
+            HideEverything();
+            DisplayContent(DisplayClass);
+            // record button pressed  
+            if (sButtonClick.value) {
+              sButtonClick.value = sButtonClick.value+';'+ButtonID;
+            } else {
+              sButtonClick.value = ButtonID;
+            };
+            // change previous to new
+            sPreviousPress = btn.id;
+            console.log(sButtonClick.value);
+          }
+        });
+        // Mouseout
+        btn.addEventListener('mouseout', function() {
+          // Record Event Time
+          now   = new Date().getTime();
+          // Hide the content & Reset previous item
+          sPreviousPress = ' ';
+          HideEverything();
+          // Check if there is focus checks
+          if (typeof bCheckFocus !== 'undefined' && bCheckFocus==true && TBlur>=dPreviousTime) {
+            // substract the blurred time
+            diff = (now-dPreviousTime)-(TFocus-TBlur);
+          } else {
+            diff = (now-dPreviousTime);
+          }
+          // Add Time
+          if (sTimeClick.value) {
+            sTimeClick.value = sTimeClick.value+';'+ diff;
+          } else {
+            sTimeClick.value = diff;
+          };
+          console.log(sTimeClick.value);  
+      });
+    } else {
+      console.log('"'+sActivation+'"'+' is not a valid Activation method')
+    }
+
     };
-
     // ----------------------------------------------------- //
     //  Function:    Display Contents from a specific class  
+    //  Inputs:
+    //    - DisplayClass    : String, class combination that will be activated
     // ----------------------------------------------------- //
 
-    function DisplayContent(Act,val='') {
-      let x = document.getElementsByClassName(Act);
+    function DisplayContent(DisplayClass) {
+      let x = document.getElementsByClassName(DisplayClass);
       for(let i = 0; i<x.length; i++) {
         x[i].classList.remove('hidden');
         x[i].classList.add('non-hidden');
       }
     };
+
     // ----------------------------------------------------- //
     //  Function:     Hide all elements in the table   
     // ----------------------------------------------------- //
@@ -173,6 +290,17 @@
 
     // ----------------------------------------------------- //
     //  Function:   Print Table on HTML
+    //  Inputs:
+    // - vOutcomes    :   array of strings with values for the table.
+    //                    Values stacked by rows (r1c1,r1c2...r2c1,r2c2...)
+    // - TableId      :   String
+    // - TableClass   :   String, all classes for table
+    // - sActivation  :   String, activation method for button
+    // - vTrigger     :   array of strings with values type 
+    //                    of buttons that get activated
+    //                    (val,row,col)
+    // - vRowNames    :   array of strings with Row Names
+    // - vColNames    :   array of strings with Column ColNames
     // ----------------------------------------------------- //
     function CreateTable(vOutcomes,TableId='',TableClass='',sActivation='click',vTrigger='val',vRownames=[],vColnames=[]) {
       
@@ -239,7 +367,7 @@
       GameBody.appendChild(table);
     }
 
-        // ----------------------------------------------------- //
+    // ----------------------------------------------------- //
     //  Function:   1.  Compile inputs for the Table and make  
     //                  them readable for subsequent steps.
     //              2.  Notify if dimensions of the table or 
@@ -300,7 +428,7 @@
       }
   };
 
-      // ----------------------------------------------------- //
+    // ----------------------------------------------------- //
     //  Function:     Creates List of triggering buttons   
     // ----------------------------------------------------- //
     function TriggerLabels(vTrigger,TableId,vColNames,vRowNames) {
