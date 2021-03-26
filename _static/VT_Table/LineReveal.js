@@ -1,15 +1,16 @@
     // Constants
-    const GameBody        = document.getElementsByClassName("game-body")[0];
+    const OtreeBody     = document.getElementsByClassName("_otree-content")[0];
     const TablePaddingV = js_vars.TablePaddingV;
     const TablePaddingH = js_vars.TablePaddingH;
     const iTimeOut      = js_vars.iTimeOut;
+    const vColNames     = js_vars.vColnames;
+    const vRowNames     = js_vars.vRownames;
     // O-tree variables
     let sActivation     = js_vars.sActivation;
     let vTrigger        = js_vars.vTrigger.split(',');
     let Attr_order      = js_vars.Attr_order;
     let vOutcomes       = js_vars.vOutcomes.split(',');
-    let vColNames       = js_vars.vColnames;
-    let vRowNames       = js_vars.vRownames;
+
 
     // Time and Click variables
     let sPreviousPress  = 'Start';
@@ -48,6 +49,9 @@
     let EndButton               = document.createElement('button');
     EndButton.style.visibility  = 'hidden';
     EndButton.className         = 'next_button btn btn-primary btn-large';
+    // Game-Wrapper
+    let GameBody        = document.createElement('div');
+    GameBody.className  = 'game-body';
 
     // Create hidden input (Decision)
     let dRT         = document.createElement("input");
@@ -58,12 +62,10 @@
 
     // Create Table during Page loading
     document.addEventListener("DOMContentLoaded", function(debug=true) {
+      OtreeBody.appendChild(GameBody);
       // Include Table
       CreateTable(vOutcomes,TableId='T',TableClass='gametable',sActivation,vTrigger,vRowNames,vColNames,DecID = 'iDec');
-      let x = document.getElementById('T').getElementsByTagName('button');
-      for (let j=0; j<x.length; j++) {
-        x[j].style.cursor = 'default'; 
-      }
+
       // Include inputs
       GameBody.appendChild(sButtonClick);
       GameBody.appendChild(sTimeClick);
@@ -79,28 +81,16 @@
       } else {
         console.log(iTimeOut+' is not correctly defined');
       }
-      
+      // Correct Table Sizes
+      CheckOverflow('button-game'); 
+      //    
+      let x = document.getElementById('T').getElementsByTagName('button');
+      for (let j=0; j<x.length; j++) {
+        x[j].style.cursor = 'default'; 
+      }
     });
 
-    // ----------------------------------------------------- //
-    // Function:          Set up Table initial dimensions
-    // ----------------------------------------------------- //
-
-    function OutOfTime() {
-      iDec.value      = '99';
-      dRT.value       = +iTimeOut*1000;
-      EndButton.click();
-    }
-
-    // ----------------------------------------------------- //
-    // Function:          Save Final Variables when submitting
-    // ----------------------------------------------------- //
-
-    function FinalizeTrial() {
-      let FinalTime       = new Date().getTime();
-      dRT.value           = FinalTime - StartTime;
-    }
-
+    
     // ----------------------------------------------------- //
     // Function:          Set up Table initial dimensions
     // Inputs:
@@ -149,20 +139,42 @@
     //    - sActivation     : String, activation method for button
     // ----------------------------------------------------- //
     function CellButton(Cell, vTriggerLabels, ButtonClass='',ButtonID='',ButtonValue='',DisplayClass='',sActivation='click') {
-        // Create Button and apply characteristics
-        let btn = document.createElement('button');
-        btn.type = "button";
+      // Create Button and apply characteristics
+        let btn       = document.createElement('button');
+        btn.type      = "button";
         btn.className = ButtonClass;
-        btn.id = ButtonID;
-        btn.value = ButtonValue;
-        btn.innerHTML = ButtonValue;
+        btn.id        = ButtonID;
+        btn.value     = ButtonValue;
+        CheckImage(btn, ButtonValue);
         
         if (vTriggerLabels.includes(btn.id)) {
           AddVisualTracer(btn,sActivation,DisplayClass);
         };
         Cell.appendChild(btn);
     };
-
+    // ----------------------------------------------------- //
+    //  Function:       1. Looks at string value and detects form "img:Name"  
+    //                  2. In case of image, replaces value for image Tag
+    //                  3. Adds cleaned value to button 
+    //  Inputs:
+    //    - btn      : Target button, where evenlistener will be added 
+    //    - sValue   : String, value
+    function CheckImage(btn,sValue) {
+        // Check if Image:
+        
+        if (sValue.substring(0, 4)=='img:') {
+          //console.log(btn.id+' is image')
+          let ButtonImage = document.createElement('img');
+          ButtonImage.src = '/static/EcoLabels/'+sValue.substring(4);
+          ButtonImage.className = 'button-img'
+          btn.appendChild(ButtonImage);
+          return 
+        } else {
+          //console.log(btn.id+' is other')
+          btn.innerHTML = sValue;
+        }
+        
+    };
     // ----------------------------------------------------- //
     //  Function:       1. Adds OnClick or Mouseover/Mouseout  
     //                  2. Records Times and Clicks Accordingly
@@ -171,7 +183,7 @@
     //    - sActivation     : String, activation method for button
     //    - DisplayClass    : String, class combination that will be activated
     // ----------------------------------------------------- //
-
+    
     function AddVisualTracer(btn,sActivation,DisplayClass) {      
       if (sActivation=='click') {
         // If click
@@ -191,7 +203,7 @@
               };
               // change previous to new
               sPreviousPress = btn.id;
-              console.log(sButtonClick.value);
+              //console.log(sButtonClick.value);
             
             // Check if there was lost of focus
             if (typeof bCheckFocus !== 'undefined' && bCheckFocus==true && TBlur>=dPreviousTime) {
@@ -209,9 +221,9 @@
             // Replace previous time
             dPreviousTime = now;
           }
-          console.log(sTimeClick.value);  
+          //console.log(sTimeClick.value);  
         });
-
+        
       } else if (sActivation=='mouseover') {
         // mouseover
         btn.addEventListener('mouseover', function() {
@@ -222,15 +234,16 @@
             // display specific content and hide rest
             HideEverything();
             DisplayContent(DisplayClass);
+            
             // record button pressed  
             if (sButtonClick.value) {
-              sButtonClick.value = sButtonClick.value+';'+ButtonID;
+              sButtonClick.value = sButtonClick.value+';'+btn.id;
             } else {
-              sButtonClick.value = ButtonID;
+              sButtonClick.value = btn.id;
             };
             // change previous to new
             sPreviousPress = btn.id;
-            console.log(sButtonClick.value);
+            //console.log(sButtonClick.value);
           }
         });
         // Mouseout
@@ -253,7 +266,7 @@
           } else {
             sTimeClick.value = diff;
           };
-          console.log(sTimeClick.value);  
+          //console.log(sTimeClick.value);  
       });
     } else {
       console.log('"'+sActivation+'"'+' is not a valid Activation method')
@@ -287,7 +300,7 @@
       }
     };
 
-
+    
     // ----------------------------------------------------- //
     //  Function:   Print Table on HTML
     //  Inputs:
@@ -312,7 +325,7 @@
       let iCol = Outcomes.Columns;
       let vColNames = Outcomes.ColNames;
       let vRowNames = Outcomes.RowNames;
-
+      
       // Create list of elements that trigger changes
       let vTriggerLabels = TriggerLabels(vTrigger,TableId,vColNames,vRowNames);
       // Create relevant elements
@@ -327,18 +340,22 @@
         });
       }
       let row = table.insertRow(0);
+      row.classList.add('game-element');
       let cell = row.insertCell(0);
-    
+      cell.classList.add('game-element');
       // Fill header
       for (j=0; j<iCol; j++) {
         cell = row.insertCell(j+1);
+        cell.classList.add('game-element');
         //console.log(vTriggerLabels.includes(TableId+'C'+vColNames[j]));
         CellButton(cell,vTriggerLabels,'button-game button-action',TableId+'C'+j.toString(),vColNames[j],'Gcol-'+j+' tab-'+TableId,sActivation)
       }
       // Fill Rows
       for (i=0;i<iRow;i++) {
         row = table.insertRow(i+1);
+        row.classList.add('game-element');
         cell = row.insertCell(0);
+        cell.classList.add('game-element');
         outcomes = vValues.slice(iCol*i,iCol*(i+1));
         // console.log(vValues + ' - ' + outcomes);
         // Add Row Name
@@ -347,6 +364,7 @@
         // go through col values
         for (j=0; j<iCol; j++) {
           cell = row.insertCell(j+1);
+          cell.classList.add('game-element');
           // console.log(outcomes[j]);
           CellButton(cell,vTriggerLabels,'button-game button-outcome Grow-'+i+' Gcol-'+j+' tab-'+TableId,TableId+'R'+i.toString()+'C'+j.toString(),outcomes[j],'Gcol-'+j+' Grow-'+i,sActivation)
           
@@ -357,16 +375,21 @@
       row.style.height = '10vh';
       row.style.lineHeight = '10vh';
       row.style.textAlign = 'center';
+      row.classList.add('game-element');
+
       cell = row.insertCell(0);
+      cell.classList.add('game-element');
+
       for (j=0; j<iCol; j++) {
         cell = row.insertCell(j+1);
+        cell.classList.add('game-element');
+
         CellDecisionButton(cell,ButtonClass='btn btn-primary btn-large',DecID=DecID,ButtonValue=j,ButtonName=vColNames[j])
       }
-
       // Append Table to document
       GameBody.appendChild(table);
     }
-
+    
     // ----------------------------------------------------- //
     //  Function:   1.  Compile inputs for the Table and make  
     //                  them readable for subsequent steps.
@@ -382,19 +405,19 @@
       // Rows
 
       if (!iR && !iC) {
-          let sqrt= Math.sqrt(length) ;
+        let sqrt= Math.sqrt(length) ;
           if (Number.isInteger(sqrt)) {
               iC = sqrt;
               iR = sqrt;
-          }
+            }
       }
       if (iR) {
           if (length%iR == 0) {
-              if (!iC) {
+            if (!iC) {
                   iC = length/iR;
               };
           } else {
-              console.log('Rows do not fit in table');
+            console.log('Rows do not fit in table');
           };
       };
       // Columns
@@ -403,10 +426,10 @@
               if (!iR) {
                   iR = length/iC;
               };
-          } else {
+            } else {
               console.log('Columns do not fit in table');
           };
-      };
+        };
       
       // Check both match 
       if (length/(iR*iC)!=1) {
@@ -418,16 +441,16 @@
       
       if (vColNames) {
           this.ColNames = vColNames;
-      } else {
+        } else {
           this.ColNames = ABC.slice(-iC);
       }
       if (vRowNames) {
           this.RowNames = vRowNames;
       } else {
           this.RowNames = ABC.slice(0,iR);
-      }
+        }
   };
-
+  
     // ----------------------------------------------------- //
     //  Function:     Creates List of triggering buttons   
     // ----------------------------------------------------- //
@@ -460,3 +483,76 @@
       }
       return vTriggerLabels;
     }
+      // ----------------------------------------------------- //
+      // Function:          Wrap-up the game when finished
+      // ----------------------------------------------------- //
+    
+      function OutOfTime() {
+        iDec.value      = '99';
+        dRT.value       = +iTimeOut*1000;
+        EndButton.click();
+      }
+    
+      // ----------------------------------------------------- //
+      // Function:          Save Final Variables when submitting
+      // ----------------------------------------------------- //
+    
+      function FinalizeTrial() {
+        let FinalTime       = new Date().getTime();
+        dRT.value           = FinalTime - StartTime;
+      }
+
+      // ----------------------------------------------------- //
+      // Function:          1. Check Overflow
+      //                    2. Adjust Size Accordingly
+      // ----------------------------------------------------- //
+    
+      function CheckOverflow(ClassName) {
+        // Collect all items
+        let vButtons      = document.getElementsByClassName(ClassName);
+        let ScreenWidth   = window.innerWidth;
+        let ScreenHeight  = window.innerHeight;
+        let iRows         = vRowNames.length+2;
+        let iCols         = vColNames.length+1;
+        let PadV          = TablePaddingV.substr(0,TablePaddingV.length-2)*ScreenHeight/100;
+        let PadH          = TablePaddingH.substr(0,TablePaddingH.length-2)*ScreenWidth/100;
+        let minWidth      = 0;
+        let minHeight     = 0;
+        let minSqSize     = 0;
+        let maxSqSize     = Math.max(
+          0.8*ScreenHeight/(iRows)-PadV,
+          0.8*ScreenWidth/(iCols)-PadH
+        );
+        // Check Min Heights and Widths
+        for (i=0;i<vButtons.length;i++) {
+          // Check Height
+          let btnOF = vButtons[i];
+          if  (btnOF.scrollHeight > btnOF.offsetHeight) {
+            console.log(btnOF.id+' has vertical overflow');
+            minHeight = btnOF.scrollHeight+5;
+          };
+          // Check Width
+          let btn = vButtons[i];
+          if  (btnOF.scrollWidth > btnOF.offsetWidth) {
+            console.log(btnOF.id+' has horizontal overflow');
+            minWidth = btnOF.scrollWidth+5;
+          };
+        };
+        // First, we see if the having square buttons can still work
+        minSqSize = Math.max(minWidth,minHeight);
+        
+        if (minSqSize<=maxSqSize && minSqSize!=0) {
+          // resize tr,td,th
+          let x = document.getElementsByClassName('game-element')
+          for (i=0;i<x.length;i++) {
+            x[i].style.width  = (minSqSize+PadH+0.1)+'px';
+            x[i].style.height = (minSqSize+PadV+0.1)+'px';
+          };
+          // resize buttons
+          for (i=0;i<vButtons.length;i++) {
+            vButtons[i].style.width  = (minSqSize)+'px';
+            vButtons[i].style.height = (minSqSize)+'px';
+          };
+        }
+
+      }

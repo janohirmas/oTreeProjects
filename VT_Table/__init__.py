@@ -1,6 +1,8 @@
 from otree.api import *
-from numpy import random
 import numpy as np
+from numpy import random
+from random import sample
+from random import choices
 import pandas as pd
 
 doc = """
@@ -15,15 +17,12 @@ class Constants(BaseConstants):
     num_rounds          = 10  
     # Number of Practice Rounds                                    
     num_prounds         = 3
-    # Require FullScreen (Deploys popup when not) True/False
-    sRequireFS          = True                             
     # mouseover or click 
-    sActivation         = 'click'                             
+    sActivation         = 'mouseover'                             
     # List that can include val,col,row
     vTrigger            = "val"                                   
     # random or constant
     Attr_order          = "random"  
-
     # Timeout time (in seconds)
     ## if no time-out required, leave as 0
     iTimeOut            = 0
@@ -33,15 +32,17 @@ class Constants(BaseConstants):
     # Checks if focus changes to other pages
     ## if you want to record the number of times that focus is lost, add integer form iFocusLost
     ## if you want to record the total time that focus is lost, add float form dFocusLostT
-    bCheckFocus         = True                               
+    bCheckFocus         = False                               
     # set up padding between rows (top and bottom)
-    TablePaddingV       = "5vh"                                   
+    TablePaddingV       = "1vh"                                   
     # set up padding between columns (left and right)
-    TablePaddingH       = "5vh"                                   
+    TablePaddingH       = "0vh"                                   
     # Column Names
     vColnames           = ["Product A", "Product B"]              
     # Row Names
-    vRownames           = ["Price","Quality","Sustainability"]    
+    vRownames           = ["Price","Quality","Sustainability"] 
+    # Image Path
+    sImagePath          = 'EcoLabels/'   
     # 1 Info,Info 2 Info,Uninfo 3 Uninfo,Info 4 Uninfo,Uninfo
     iTreatment          = 1                                       
     
@@ -130,9 +131,11 @@ class Decision(Page):
     def js_vars(player: Player):
         nCols               = len(Constants.vColnames)
         nRows               = len(Constants.vRownames)
-        vP                  = np.random.randint(10,20,nCols)
-        vQ                  = np.random.randint(1,5,nCols)
-        vE                  = np.random.randint(1,3,nCols)
+        lE                  = ['','img:green_leaf.png']
+        lQ                  = ['','img:check_mark.png']
+        vP                  = random.randint(10,20,nCols)
+        vQ                  = choices(lQ,k=nCols)
+        vE                  = choices(lE,k=nCols)
         sP                  = ','.join(map(str,vP))
         sQ                  = ','.join(map(str,vQ))
         sE                  = ','.join(map(str,vE))
@@ -153,7 +156,6 @@ class Decision(Page):
         return {
             'vOutcomes'         : vOutcomes,
             'sActivation'       : Constants.sActivation,
-            'sRequireFS'        : Constants.sRequireFS,
             'vTrigger'          : Constants.vTrigger,
             'Attr_order'        : Constants.Attr_order,
             'TablePaddingV'     : Constants.TablePaddingV,
@@ -163,6 +165,7 @@ class Decision(Page):
             'bRequireFS'        : Constants.bRequireFS,
             'bCheckFocus'       : Constants.bCheckFocus,
             'iTimeOut'          : Constants.iTimeOut,
+            'sImagePath'        : Constants.sImagePath,
         }
         
 

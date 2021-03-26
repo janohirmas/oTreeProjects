@@ -36,22 +36,21 @@ document.addEventListener("DOMContentLoaded", function() {
     GameBody.appendChild(iFullscreenChange);
     CreateFullScreenPopUp();
     CheckFS();
+    // Event Listener for changing screen size
+    window.addEventListener('resize',  CheckFS);
   }
   // If CheckFocus is required
   if (bCheckFocus) {
     GameBody.appendChild(iFocusLost);
     GameBody.appendChild(dFocusLostT);
-
+    // Event Listener for gaining and losing focus on the page
+    window.addEventListener('blur', pause);
+    window.addEventListener('focus', play);
   }
 
 
 });
 
-// Event Listener for changing screen size
-window.addEventListener('resize',  CheckFS);
-// Event Listener for gaining and losing focus on the page
-window.addEventListener('blur', pause);
-window.addEventListener('focus', play);
 
 
 var elem = document.documentElement;

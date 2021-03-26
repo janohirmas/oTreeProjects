@@ -20,7 +20,7 @@ summary, time, mark, audio, video {
 
 :root {
   --sq-height: 15vh;
-  --sq-width: 15vw;
+  --sq-width: 15vh;
   --row-height: 17vh;
   --row-width: 17vw;
   --action-font-size: 1.2em;
@@ -28,7 +28,7 @@ summary, time, mark, audio, video {
   --table-top-margin: 5vh;
   --outcome-background-color: #bbb;
   --outcome-text-color: #000;
-  --outcome-font-size:1em;
+  --outcome-font-size:3em;
 }
 
 body{
@@ -76,7 +76,7 @@ body{
   text-align: center;
   text-decoration: none;
   white-space: nowrap;
-  vertical-align: top;
+  vertical-align: middle;
   height: var(--sq-height);
   width: var(--sq-width);
 }
@@ -101,13 +101,28 @@ body{
   font-size: var(--outcome-font-size);
 }
 
+.button-img{
+  max-width:85%;
+  max-height:85%;
+  display: none;
+  justify-content: center;
+  align-self: center;
+}
 
 .hidden {
   color:  var(--outcome-background-color);
-  }
+}
 
 .non-hidden {
-  color: var(--outcome-text-color);
+  color:  var(--outcome-text-color);
+}
+
+.hidden .button-img{
+  display: none;
+}
+
+.non-hidden .button-img{
+  display: inline-flex;
 }
 
 
