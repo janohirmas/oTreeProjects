@@ -82,14 +82,16 @@
         console.log(iTimeOut+' is not correctly defined');
       }
       // Correct Table Sizes
-      CheckOverflow('button-game'); 
-      //    
+      CheckOverflow(); 
+      window.addEventListener('resize',CheckOverflow);
+  
       let x = document.getElementById('T').getElementsByTagName('button');
       for (let j=0; j<x.length; j++) {
         x[j].style.cursor = 'default'; 
       }
     });
-
+    // Add resize window event
+    
     
     // ----------------------------------------------------- //
     // Function:          Set up Table initial dimensions
@@ -397,63 +399,64 @@
     //                  Col/Row names do not match.
     // ----------------------------------------------------- //
 
-    function GameTable(vContent,iR,iC,vRowNames=[],vColNames=[]) {
-        
-      this.Table = vContent; 
-      let length = vContent.length;
-      // console.log(length);
-      // Rows
+      function GameTable(vContent,iR,iC,vRowNames=[],vColNames=[]) {
+          
+        this.Table = vContent; 
+        let length = vContent.length;
+        // console.log(length);
+        // Rows
 
-      if (!iR && !iC) {
-        let sqrt= Math.sqrt(length) ;
-          if (Number.isInteger(sqrt)) {
-              iC = sqrt;
-              iR = sqrt;
-            }
-      }
-      if (iR) {
-          if (length%iR == 0) {
-            if (!iC) {
-                  iC = length/iR;
-              };
-          } else {
-            console.log('Rows do not fit in table');
-          };
-      };
-      // Columns
-      if (iC) {
-          if (length%iC == 0) {
-              if (!iR) {
-                  iR = length/iC;
-              };
-            } else {
-              console.log('Columns do not fit in table');
-          };
-        };
-      
-      // Check both match 
-      if (length/(iR*iC)!=1) {
-          console.log('Dimensions do not match');
-      }
-      this.Rows = iR;
-      this.Columns = iC;
-      const ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-      
-      if (vColNames) {
-          this.ColNames = vColNames;
-        } else {
-          this.ColNames = ABC.slice(-iC);
-      }
-      if (vRowNames) {
-          this.RowNames = vRowNames;
-      } else {
-          this.RowNames = ABC.slice(0,iR);
+        if (!iR && !iC) {
+          let sqrt= Math.sqrt(length) ;
+            if (Number.isInteger(sqrt)) {
+                iC = sqrt;
+                iR = sqrt;
+              }
         }
-  };
+        if (iR) {
+            if (length%iR == 0) {
+              if (!iC) {
+                    iC = length/iR;
+                };
+            } else {
+              console.log('Rows do not fit in table');
+            };
+        };
+        // Columns
+        if (iC) {
+            if (length%iC == 0) {
+                if (!iR) {
+                    iR = length/iC;
+                };
+              } else {
+                console.log('Columns do not fit in table');
+            };
+          };
+        
+        // Check both match 
+        if (length/(iR*iC)!=1) {
+            console.log('Dimensions do not match');
+        }
+        this.Rows = iR;
+        this.Columns = iC;
+        const ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        
+        if (vColNames) {
+            this.ColNames = vColNames;
+          } else {
+            this.ColNames = ABC.slice(-iC);
+        }
+        if (vRowNames) {
+            this.RowNames = vRowNames;
+        } else {
+            this.RowNames = ABC.slice(0,iR);
+          }
+    };
   
     // ----------------------------------------------------- //
     //  Function:     Creates List of triggering buttons   
     // ----------------------------------------------------- //
+
     function TriggerLabels(vTrigger,TableId,vColNames,vRowNames) {
       
       let vTriggerLabels = [];
@@ -483,33 +486,34 @@
       }
       return vTriggerLabels;
     }
-      // ----------------------------------------------------- //
-      // Function:          Wrap-up the game when finished
-      // ----------------------------------------------------- //
+
+    // ----------------------------------------------------- //
+    // Function:          Wrap-up the game when finished
+    // ----------------------------------------------------- //
     
-      function OutOfTime() {
+    function OutOfTime() {
         iDec.value      = '99';
         dRT.value       = +iTimeOut*1000;
         EndButton.click();
-      }
+    }
     
-      // ----------------------------------------------------- //
-      // Function:          Save Final Variables when submitting
-      // ----------------------------------------------------- //
+    // ----------------------------------------------------- //
+    // Function:          Save Final Variables when submitting
+    // ----------------------------------------------------- //
     
-      function FinalizeTrial() {
+    function FinalizeTrial() {
         let FinalTime       = new Date().getTime();
         dRT.value           = FinalTime - StartTime;
-      }
+    }
 
-      // ----------------------------------------------------- //
-      // Function:          1. Check Overflow
-      //                    2. Adjust Size Accordingly
-      // ----------------------------------------------------- //
+    // ----------------------------------------------------- //
+    // Function:          1. Check Overflow
+    //                    2. Adjust Size Accordingly
+    // ----------------------------------------------------- //
     
-      function CheckOverflow(ClassName) {
+    function CheckOverflow() {
         // Collect all items
-        let vButtons      = document.getElementsByClassName(ClassName);
+        let vButtons      = document.getElementsByClassName('button-game');
         let ScreenWidth   = window.innerWidth;
         let ScreenHeight  = window.innerHeight;
         let iRows         = vRowNames.length+2;
@@ -518,41 +522,58 @@
         let PadH          = TablePaddingH.substr(0,TablePaddingH.length-2)*ScreenWidth/100;
         let minWidth      = 0;
         let minHeight     = 0;
-        let minSqSize     = 0;
-        let maxSqSize     = Math.max(
-          0.8*ScreenHeight/(iRows)-PadV,
-          0.8*ScreenWidth/(iCols)-PadH
-        );
+        let maxHeight     = 0.95*ScreenHeight/(iRows)-PadV;
+        let maxWidth      = 0.95*ScreenWidth/(iCols)-PadH;
+        
         // Check Min Heights and Widths
         for (i=0;i<vButtons.length;i++) {
           // Check Height
           let btnOF = vButtons[i];
-          if  (btnOF.scrollHeight > btnOF.offsetHeight) {
             console.log(btnOF.id+' has vertical overflow');
-            minHeight = btnOF.scrollHeight+5;
-          };
+            minHeight = Math.max(minHeight,btnOF.scrollHeight+5);
+
           // Check Width
-          let btn = vButtons[i];
-          if  (btnOF.scrollWidth > btnOF.offsetWidth) {
             console.log(btnOF.id+' has horizontal overflow');
-            minWidth = btnOF.scrollWidth+5;
-          };
+            minWidth = Math.max(minWidth,btnOF.scrollWidth+5);
+
         };
-        // First, we see if the having square buttons can still work
-        minSqSize = Math.max(minWidth,minHeight);
-        
-        if (minSqSize<=maxSqSize && minSqSize!=0) {
+
+       
+        let minSqSize = Math.max(minWidth,minHeight);   
+
+        if (minSqSize<=Math.min(maxHeight,maxWidth)) { 
+          // If MinSqSize is still possible
+          console.log('buttons are squared')
           // resize tr,td,th
           let x = document.getElementsByClassName('game-element')
           for (i=0;i<x.length;i++) {
-            x[i].style.width  = (minSqSize+PadH+0.1)+'px';
-            x[i].style.height = (minSqSize+PadV+0.1)+'px';
+            x[i].style.width  = (minSqSize+PadH+1)+'px';
+            x[i].style.height = (minSqSize+PadV+1)+'px';
           };
           // resize buttons
           for (i=0;i<vButtons.length;i++) {
             vButtons[i].style.width  = (minSqSize)+'px';
             vButtons[i].style.height = (minSqSize)+'px';
           };
-        }
-
-      }
+        } else if (minWidth<maxWidth && minHeight<maxHeight) {
+          // Second, rectangular 
+          console.log('buttons are rectangular')
+          console.log('Min Dimensions: '+minWidth+'x'+minHeight);
+          console.log('Max Dimensions: '+maxWidth +'x'+maxHeight);
+          let x = document.getElementsByClassName('game-element')
+          // resize tab elements
+          for (i=0;i<x.length;i++) {
+            x[i].style.width  = (minWidth+PadH+1)+'px';
+            x[i].style.height = (minHeight+PadV+1)+'px';
+          };
+          // resize buttons
+          for (i=0;i<vButtons.length;i++) {
+            console.log(vButtons[i].id);
+            vButtons[i].style.width  = (minWidth)+'px';
+            vButtons[i].style.height = (minHeight)+'px';
+          }
+        } else {
+          // resize font
+          console.log('Resize Buttons')
+        };
+      };

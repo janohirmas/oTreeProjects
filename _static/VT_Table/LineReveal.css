@@ -23,19 +23,20 @@ summary, time, mark, audio, video {
   --sq-width: 15vh;
   --row-height: 17vh;
   --row-width: 17vw;
-  --action-font-size: 1.2em;
+  --action-font-size: 1em;
   --table-side-margin: 25vw;
   --table-top-margin: 5vh;
-  --outcome-background-color: #bbb;
+  --outcome-background-color: ##fff;
+  --outcome-background-hidden: rgb(150,150,150);
   --outcome-text-color: #000;
-  --outcome-font-size:3em;
+  --outcome-font-size:2em;
 }
 
 body{
   background-color: #eee;
   color: var(--outcome-text-color);
   font-size: 1em;
-  font-family: Candara, Garamond, Helvetica, sans-serif;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
   min-height: 120vh;
   display: flex;
   flex-direction: column;
@@ -92,12 +93,12 @@ body{
 
 .button-action {
   font-size: var(--action-font-size);
-  background-color: #999; 
+  background-color: rgb(150,150,150); 
 }
 
 .button-outcome {
-  background-color: var(--outcome-background-color);
-  color: var(--outcome-background-color);
+  background-color: var(--outcome-background-hidden);
+  color: var(--outcome-background-hidden);
   font-size: var(--outcome-font-size);
 }
 
@@ -110,11 +111,13 @@ body{
 }
 
 .hidden {
-  color:  var(--outcome-background-color);
+  color:  var(--outcome-background-hidden);
+  background-color: var(--outcome-background-hidden);
 }
 
 .non-hidden {
   color:  var(--outcome-text-color);
+  background-color: var(--outcome-background-color);
 }
 
 .hidden .button-img{
