@@ -56,6 +56,7 @@ SECRET_KEY = 'z5^&f@e_=8$0@oeuw(k43s+x7igt_csvrv^nl4z8!lz))^15-8'
 
 INSTALLED_APPS = ['otree']
 
+PARTICIPANT_FIELDS = ['mTreatment']
 # inactive session configs
 # dict(name='trust', display_name="Trust Game", num_demo_participants=2, app_sequence=['trust', 'payment_info']),
 # dict(name='prisoner', display_name="Prisoner's Dilemma", num_demo_participants=2,

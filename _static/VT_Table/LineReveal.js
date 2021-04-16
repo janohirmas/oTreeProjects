@@ -290,7 +290,7 @@
     };
 
     // ----------------------------------------------------- //
-    //  Function:     Hide all elements in the table   
+    //  Function:     Hide all elements in the table  
     // ----------------------------------------------------- //
 
     function HideEverything() {

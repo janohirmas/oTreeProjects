@@ -4,6 +4,7 @@ from numpy import random
 from random import sample
 from random import choices
 import pandas as pd
+import csv
 
 doc = """
 Creates Table with Visual Tracing
@@ -51,12 +52,8 @@ class Constants(BaseConstants):
 class Subsession(BaseSubsession):
     pass
 
-        
-
-
 class Group(BaseGroup):
     pass
-
 
 class Player(BasePlayer):
     iDec                = models.IntegerField(blank=True)
@@ -70,48 +67,14 @@ class Player(BasePlayer):
     dFocusLostT         = models.FloatField(blank=True)
     iFullscreenChange   = models.IntegerField(blank=True)
 
+
 # FUNCTIONS
 
-def treatments_conds():
-            # create the dictionary with the variables
-            treatments_dic = {
-                'ConditionNumber': [],
-                'sPCond': [],
-                'sQCond': [],
-                'sECond': [],
-                'iQTreat': [],
-                'iETreat':[],
-            }
-            # Define possible conditions
-            lPConditions    = ['EQ','SD','BD'] # Equal (EQ), Small Difference (SD), Big Difference (BD) 
-            lQConditions    = ['EQ','DQ'] # Equal Quality (EQ),  Different Quality (DQ)
-            lEConditions    = ['EE','DE'] # Equal Eco (EE), Different Eco (DE)
-
-            # These variables are specific to our treatment method
-            iQTreat             = True
-            iETreat             = True
-            iTreatment          = Constants.iTreatment
-            if iTreatment == 2:
-                iETreat = False
-            elif iTreatment == 3:
-                iQTreat = False
-            elif iTreatment == 4:
-                iETreat = False
-                iQTreat = False
-
-            count               = 1
-            for p in lPConditions :
-                for q in lQConditions :
-                    for e in lEConditions :
-                        treatments_dic['sPCond'].append(p)
-                        treatments_dic['sQCond'].append(q)
-                        treatments_dic['sECond'].append(e)
-                        treatments_dic['ConditionNumber'].append(count)
-                        treatments_dic['iQTreat'].append(iQTreat)
-                        treatments_dic['iETreat'].append(iETreat)
-                        count +=1 
-            treatments_df   = pd.DataFrame(treatments_dic)
-            return treatments_df
+def creating_session(subsession):
+    if subsession.round_number == 1:
+        for player in subsession.get_players():
+            participant = player.participant
+            participant.mTreatment = random.choice(['blue', 'red'], size=Constants.num_rounds)
 
 # PAGES
 class Decision(Page):
@@ -126,6 +89,14 @@ class Decision(Page):
         'dFocusLostT',
         'iFullscreenChange',
     ]
+    @staticmethod
+    def vars_for_template(player):
+        participant     = player.participant
+        vTreatment      = participant.mTreatment
+        iRound          = player.round_number
+        return {
+            'treatment' : vTreatment[iRound]
+        }
 
     @staticmethod
     def js_vars(player: Player):
