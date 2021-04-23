@@ -76,6 +76,7 @@ def creating_session(subsession):
             participant = player.participant
             participant.mTreatment = random.choice(['blue', 'red'], size=Constants.num_rounds)
 
+
 # PAGES
 class Decision(Page):
     form_model = 'player'
@@ -89,6 +90,7 @@ class Decision(Page):
         'dFocusLostT',
         'iFullscreenChange',
     ]
+
     @staticmethod
     def vars_for_template(player):
         participant     = player.participant
