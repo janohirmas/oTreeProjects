@@ -2,7 +2,7 @@
 {% load otree static %}
 
 {% block title %}
-    Page title
+    Do you like the Meme?
 {% endblock %}
 
 {% block content %}
@@ -38,13 +38,67 @@
     }
 </style>
 
+<script>
+    // Load Treatment
+    sTreat = js_vars.sTreat
+    
+    // Hidden Next Button
+    let EndButton               = document.createElement('button');
+    EndButton.style.visibility  = 'hidden';
+    EndButton.className         = 'next_button btn btn-primary btn-large';
+
+    // Create hidden input (Decision)
+    let iDec        = document.createElement("input");
+    iDec.type       = 'hidden';
+    iDec.name       = 'iDec3';
+    iDec.id         = 'iDec3';
+    iDec.value      = '';
+
+    document.addEventListener("DOMContentLoaded", function(debug=true) {
+        console.log('Loading info');
+
+        let OtreeBody     = document.getElementsByClassName("_otree-content")[0];
+        OtreeBody.appendChild(iDec);
+        OtreeBody.appendChild(EndButton);
+        // Add event listener for pressing L
+        document.addEventListener("keyup", function(event) {
+        if (event.keyCode === 76) {
+            // change input value
+            iDec.value = 'L';
+            console.log('L was pressed');
+            // press next button
+            EndButton.click();
+        }
+        });
+
+        // Check for treatment
+        console.log(sTreat);
+        if (sTreat=='Like') {
+            // Hide dislike option
+            let x = document.getElementById('dislike');
+            x.style.visibility = 'hidden';
+        } else if (sTreat=='Dislike') {
+            // Add EventListener for Dislike with K
+            document.addEventListener("keyup", function(event) {
+            if (event.keyCode === 75) {
+                // change input value
+                iDec.value = 'K';
+                console.log('K was pressed');
+                // press next button
+                EndButton.click();
+            }
+        });
+        }
+    });
+</script>
+
 <div class="meme-body">
     <div class="img-wrapper">
         <img id='meme-pic' src= {{ static Image }} />
     </div>
     <div class="meme-text">
         <p>
-            Press 'L' to like
+            Press 'L' to like 
         </p>
         <p id="dislike">
             or 'K' to dislike

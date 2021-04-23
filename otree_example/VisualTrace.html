@@ -2,7 +2,7 @@
 {% load otree static %}
 
 {% block title %}
-    Page title
+    Color Game
 {% endblock %}
 
 <link href="{% static 'global/VisualTraceStyles.css' %}" rel="stylesheet">
@@ -19,20 +19,26 @@
     OtreeBody.appendChild(dRT);
 
     // Find all buttons
-    vButtons = document.getElementsByClassName('game-button');
+    let vButtons = document.getElementsByClassName('game-button');
+    let vColors  = js_vars.vColors;
     for(let i = 0; i<vButtons.length; i++) {
     let btn = vButtons[i];
     let DisplayClass = btn.id;
     btn.classList.add(DisplayClass);
+    btn.classList.add(vColors[i]);
     AddVisualTracer(btn,'mouseover',DisplayClass);
     } 
+    
     });
 </script>
 
 {% block content %}
-<p>Please select the option with the {{ treatment }} 'blue' </p>
+<p>Please select the option with the <b> {{ treatment }} </b> 'blue' </p>
     <table>
         <tr>
+            <td >
+                <button id="b0" name="iDec2" class="game-button button-outcome hidden" value="0"> {{ Color0 }} </button>
+            </td>
             <td >
                 <button id="b1" name="iDec2" class="game-button button-outcome hidden" value="1"> {{ Color1 }} </button>
             </td>
@@ -41,9 +47,6 @@
             </td>
             <td >
                 <button id="b3" name="iDec2" class="game-button button-outcome hidden" value="3"> {{ Color3 }} </button>
-            </td>
-            <td >
-                <button id="b4" name="iDec2" class="game-button button-outcome hidden" value="4"> {{ Color4 }} </button>
             </td>
         </tr>
     </table>
