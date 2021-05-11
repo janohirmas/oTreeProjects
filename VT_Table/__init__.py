@@ -29,11 +29,11 @@ class Constants(BaseConstants):
     iTimeOut            = 0
     # Checks if you require FullScreen
     ## if you want to record number of FS changes add integer form iFullscreenChange
-    bRequireFS          = False                                   
+    bRequireFS          = True                                   
     # Checks if focus changes to other pages
     ## if you want to record the number of times that focus is lost, add integer form iFocusLost
     ## if you want to record the total time that focus is lost, add float form dFocusLostT
-    bCheckFocus         = False                               
+    bCheckFocus         = True                               
     # set up padding between rows (top and bottom)
     TablePaddingV       = "1vh"                                   
     # set up padding between columns (left and right)
@@ -104,8 +104,8 @@ class Decision(Page):
     def js_vars(player: Player):
         nCols               = len(Constants.vColnames)
         nRows               = len(Constants.vRownames)
-        lE                  = ['','img:green_leaf.png']
-        lQ                  = ['','img:check_mark.png']
+        lE                  = ['img:leaf_1.png','img:leaf_2.png','img:leaf_3.png']
+        lQ                  = ['img:star_1.png','img:star_2.png','img:star_3.png']
         vP                  = random.randint(10,20,nCols)
         vQ                  = choices(lQ,k=nCols)
         vE                  = choices(lE,k=nCols)

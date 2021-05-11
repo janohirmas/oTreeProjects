@@ -58,6 +58,7 @@ def creating_session(subsession):
         # Setup a treatment condition (constant within player)
         participant             = player.participant
         ## This one remains constant across trials
+
         sTreat1          = random.choice(['easy', 'difficult'])
         player.sTreat1  = sTreat1
         print('set player.sTreat1 to', player.sTreat1)
@@ -151,6 +152,7 @@ class VisualTrace(Page):
     def vars_for_template(player):
         participant     = player.participant
         values          = player.sVal2.split(';')
+        
         iRound          = player.round_number
         return {
             'Color0'    : values[0],
@@ -159,6 +161,7 @@ class VisualTrace(Page):
             'Color3'    : values[3],
             'treatment' : player.sTreat2,
         }
+
 
     @staticmethod
     def js_vars(player: Player):

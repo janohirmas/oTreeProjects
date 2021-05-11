@@ -16,18 +16,6 @@
     display: inline-flex;
   }
 
-  .non-hidden.blue {
-    color: blue;
-  }
-
-  .non-hidden.red {
-    color: red;
-  }
-
-  .non-hidden.green {
-    color: green;
-  }
-
-  .non-hidden.black {
-    color: black;
+  .button-outcome {
+    font-size: 1em;
   }

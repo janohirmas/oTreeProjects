@@ -1,0 +1,52 @@
+<script src="{% static 'Math/Math1.js' %}"></script>
+{{ block title }}
+    Matrices task
+{{ endblock }}
+
+{{ block content }}
+
+<link href="{% static 'Math/Math.css' %}" rel="stylesheet">
+
+    <!DOCTYPE html>
+    <html>
+    
+    <head>
+    </head>
+    
+    <table class="table">
+        <tr>
+            <td><button class = "game-button" id="button1" type="button"></button></td>
+            <td><button class = "game-button" id="button2" type="button"></button></td>
+            <td><button class = "game-button" id="button3" type="button"></button></td>
+        </tr>
+        <tr>
+            <td><button class = "game-button" id="button4" type="button"></button></td>
+            <td><button class = "game-button" id="button5" type="button"></button></td>
+            <td><button class = "game-button" id="button6" type="button"></button></td>
+        </tr>
+        <tr>
+            <td><button class = "game-button" id="button7" type="button"></button></td>
+            <td><button class = "game-button" id="button8" type="button"></button></td>
+            <td><button class = "game-button" id="button9" type="button"></button></td>
+        </tr>
+        <tr>
+            <td><button class = "game-button" id="button10" type="button"></button></td>
+            <td><button class = "game-button" id="button11" type="button"></button></td>
+            <td><button class = "game-button" id="button12" type="button"></button></td>
+        </tr>
+    </table>
+
+    <input type="hidden" name="correcttables" id="correcttables" />
+
+    <p id="text1"></p>
+    <p id="text2"></p>
+
+    <p></p>
+      
+    </html>
+
+    {{ next_button }}
+
+{{ endblock }}
+
+

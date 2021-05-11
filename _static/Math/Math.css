@@ -1,0 +1,17 @@
+table td{
+border: none;
+text-align: center;
+}
+
+.game-button {
+font-size: x-large;
+border: none;
+padding: 20px 5px; /*width/height of buttons*/
+text-align: center;
+margin: 4px;
+width:100%;
+}
+
+/*.otree-timer {
+    display: none;
+}*/

@@ -22,13 +22,19 @@ SESSION_CONFIGS = [
         name='vttable',
         display_name="Visual-Tracing Table",
         num_demo_participants=1,
-        app_sequence=['instructions','VT_Table'],
+        app_sequence=['VT_Table'],
     ),
     dict(
-        name='otree1',
-        display_name="oTree Example",
+        name='math_task',
+        display_name="Math Task",
         num_demo_participants=1,
-        app_sequence=['otree_example'],
+        app_sequence=['Math'],
+    ),
+    dict(
+        name='create_vt',
+        display_name="Create VT buttons",
+        num_demo_participants=1,
+        app_sequence=['check_VT'],
     ),
 ]
 
