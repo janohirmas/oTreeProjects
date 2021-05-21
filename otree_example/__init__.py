@@ -125,6 +125,7 @@ class SumUp(Page):
         'iDec1',  
         'dRT1',
     ]
+    
     @staticmethod
     def vars_for_template(player):
         participant     = player.participant

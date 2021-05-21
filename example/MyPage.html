@@ -1,0 +1,16 @@
+{% extends "global/Page.html" %}
+
+{% block title %}
+    Page title
+{% endblock %}
+{% block content %}
+
+<p>
+    Player Round: {{ P1 }}
+    Player Treatment: {{ P2 }}
+</p>
+ 
+    {% formfields %}
+    {% next_button %}
+
+{% endblock %}

@@ -12,13 +12,6 @@ SESSION_CONFIG_DEFAULTS = dict(
 
 SESSION_CONFIGS = [
     dict(
-        name='my_session_config',
-        display_name='Configure Session',
-        num_demo_participants=2,
-        app_sequence=['VT_Table'],
-        iTreatment = 0,
-    ),
-    dict(
         name='vttable',
         display_name="Visual-Tracing Table",
         num_demo_participants=1,
@@ -35,6 +28,12 @@ SESSION_CONFIGS = [
         display_name="Create VT buttons",
         num_demo_participants=1,
         app_sequence=['check_VT'],
+    ),
+        dict(
+        name='example',
+        display_name="Example Treatments",
+        num_demo_participants=1,
+        app_sequence=['example'],
     ),
 ]
 
@@ -68,7 +67,7 @@ SECRET_KEY = 'z5^&f@e_=8$0@oeuw(k43s+x7igt_csvrv^nl4z8!lz))^15-8'
 
 INSTALLED_APPS = ['otree']
 
-PARTICIPANT_FIELDS = ['mTreatment','dicVarsBetweenApps']
+PARTICIPANT_FIELDS = ['iTreat']
 # inactive session configs
 # dict(name='trust', display_name="Trust Game", num_demo_participants=2, app_sequence=['trust', 'payment_info']),
 # dict(name='prisoner', display_name="Prisoner's Dilemma", num_demo_participants=2,
